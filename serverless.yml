@@ -1,0 +1,62 @@
+service: calcutta-admin-api
+
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+custom:
+  secrets: ${file(secrets.json)}
+  stage: ${opt:stage, self:provider.stage}
+  profile:
+    prod: burke03
+    dev: dev
+        
+provider:
+  name: aws
+  runtime: nodejs12.x
+  timeout: 10
+  region: us-east-1
+  stage: dev
+  profile: ${self:custom.profile.${self:custom.stage}}
+  environment:
+    NODE_ENV: ${self:custom.stage}
+    APP_ENV: ${self:custom.stage}
+    DB_NAME: ${self:custom.secrets.${self:custom.stage}.DB_NAME}
+    DB_USER: ${self:custom.secrets.${self:custom.stage}.DB_USER}
+    DB_PASSWORD: ${self:custom.secrets.${self:custom.stage}.DB_PASSWORD}
+    DB_HOST:
+      Fn::ImportValue: calcutta-db-${self:custom.stage}-address
+    DB_PORT:
+      Fn::ImportValue: calcutta-db-${self:custom.stage}-port
+  vpc:
+    securityGroupIds:
+      - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+    subnetIds:
+      - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+      - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+      - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+
+functions:
+  getGamesBySportId:
+    handler: functions/games.getGamesBySportId
+    events:
+      - http:
+          path: getGamesBySportId/{sportId}/{date}/{offset}
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+
+resources:
+  - ${file(resources/cognito-authorizer.yml)}
