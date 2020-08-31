@@ -8,4 +8,4 @@ Resources:
       RestApiId: { "Ref" : "ApiGatewayRestApi" }
       Type: COGNITO_USER_POOLS
       ProviderARNs:
-        - ${env.${self:custom.stage}.USER_POOL_ARN}
+        - ${env:${self:custom.stage}:USER_POOL_ARN}
