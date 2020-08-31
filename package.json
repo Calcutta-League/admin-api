@@ -3,9 +3,6 @@
   "version": "0.0.0",
   "description": "Backend API for the calcutta league admin site",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Calcutta-League/admin-api.git"
