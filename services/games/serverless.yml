@@ -41,7 +41,7 @@ provider:
 
 functions:
   getSportOptions:
-    handler: services/games/getSportOptions.getSportOptions
+    handler: functions/getSportOptions.getSportOptions
     events:
       - http:
           path: getSportOptions
@@ -57,7 +57,7 @@ functions:
               - x-cognito-token
 
   getGamesBySportId:
-    handler: services/games/getGames.getGamesBySportId
+    handler: functions/getGames.getGamesBySportId
     events:
       - http:
           path: getGamesBySportId/{sportId}/{date}
@@ -73,7 +73,7 @@ functions:
               - x-cognito-token
 
   updateScores:
-    handler: services/games/updateScores.updateScores
+    handler: functions/updateScores.updateScores
     events:
       - http:
           path: updateScores

@@ -22,6 +22,8 @@ deploy_service_job:
   - cd -
   script: &3
   - cd ${SERVICE_PATH}
+  - echo ${DB_NAME}
+  - echo ${dev.DB_NAME}
   - serverless deploy -s ${STAGE_NAME}
   - cd -
 environments:
