@@ -24,9 +24,9 @@ provider:
   environment:
     NODE_ENV: ${self:custom.stage}
     APP_ENV: ${self:custom.stage}
-    DB_NAME: ${env:${self:custom.stage}:DB_NAME}
-    DB_USER: ${env:${self:custom.stage}:DB_USER}
-    DB_PASSWORD: ${env:${self:custom.stage}:DB_PASSWORD}
+    DB_NAME: ${env:DB_NAME}
+    DB_USER: ${env:DB_USER}
+    DB_PASSWORD: ${env:DB_PASSWORD}
     DB_HOST:
       Fn::ImportValue: calcutta-db-${self:custom.stage}-address
     DB_PORT:
