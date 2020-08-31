@@ -1,4 +1,4 @@
-service: calcutta-admin-api
+service: calcutta-admin-api-games
 
 package:
   individually: true

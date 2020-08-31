@@ -22,8 +22,6 @@ deploy_service_job:
   - cd -
   script: &3
   - cd ${SERVICE_PATH}
-  - echo ${TEST_VAR}
-  - echo ${TEST_VAR2}
   - serverless deploy -s ${STAGE_NAME}
   - cd -
 env:
