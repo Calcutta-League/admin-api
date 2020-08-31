@@ -9,7 +9,6 @@ plugins:
   - serverless-dotenv-plugin
 
 custom:
-  secrets: ${file(secrets.json)}
   stage: ${opt:stage, self:provider.stage}
   profile:
     prod: burke03
@@ -25,9 +24,9 @@ provider:
   environment:
     NODE_ENV: ${self:custom.stage}
     APP_ENV: ${self:custom.stage}
-    DB_NAME: ${self:custom.secrets.${self:custom.stage}.DB_NAME}
-    DB_USER: ${self:custom.secrets.${self:custom.stage}.DB_USER}
-    DB_PASSWORD: ${self:custom.secrets.${self:custom.stage}.DB_PASSWORD}
+    DB_NAME: ${env:${self:custom.stage}.DB_NAME}
+    DB_USER: ${env:${self:custom.stage}.DB_USER}
+    DB_PASSWORD: ${env:${self:custom.stage}.DB_PASSWORD}
     DB_HOST:
       Fn::ImportValue: calcutta-db-${self:custom.stage}-address
     DB_PORT:
@@ -41,11 +40,11 @@ provider:
       - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
 
 functions:
-  getGamesBySportId:
-    handler: functions/games.getGamesBySportId
+  getSportOptions:
+    handler: services/games/getSportOptions.getSportOptions
     events:
       - http:
-          path: getGamesBySportId/{sportId}/{date}/{offset}
+          path: getSportOptions
           method: get
           integration: lambda
           authorizer:
@@ -55,6 +54,39 @@ functions:
           cors:
             origin: '*'
             headers:
+              - x-cognito-token
+
+  getGamesBySportId:
+    handler: services/games/getGames.getGamesBySportId
+    events:
+      - http:
+          path: getGamesBySportId/{sportId}/{date}
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+  updateScores:
+    handler: services/games/updateScores.updateScores
+    events:
+      - http:
+          path: updateScores
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
               - x-cognito-token
 
 
