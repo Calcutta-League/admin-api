@@ -1,4 +1,4 @@
-service: calcutta-admin-api
+service: calcutta-admin-api-games
 
 package:
   individually: true
@@ -9,7 +9,6 @@ plugins:
   - serverless-dotenv-plugin
 
 custom:
-  secrets: ${file(secrets.json)}
   stage: ${opt:stage, self:provider.stage}
   profile:
     prod: burke03
@@ -21,13 +20,13 @@ provider:
   timeout: 10
   region: us-east-1
   stage: dev
-  profile: ${self:custom.profile.${self:custom.stage}}
+  # profile: ${self:custom.profile.${self:custom.stage}}
   environment:
     NODE_ENV: ${self:custom.stage}
     APP_ENV: ${self:custom.stage}
-    DB_NAME: ${self:custom.secrets.${self:custom.stage}.DB_NAME}
-    DB_USER: ${self:custom.secrets.${self:custom.stage}.DB_USER}
-    DB_PASSWORD: ${self:custom.secrets.${self:custom.stage}.DB_PASSWORD}
+    DB_NAME: ${env:DB_NAME}
+    DB_USER: ${env:DB_USER}
+    DB_PASSWORD: ${env:DB_PASSWORD}
     DB_HOST:
       Fn::ImportValue: calcutta-db-${self:custom.stage}-address
     DB_PORT:
@@ -41,11 +40,11 @@ provider:
       - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
 
 functions:
-  getGamesBySportId:
-    handler: functions/games.getGamesBySportId
+  getSportOptions:
+    handler: functions/getSportOptions.getSportOptions
     events:
       - http:
-          path: getGamesBySportId/{sportId}/{date}/{offset}
+          path: getSportOptions
           method: get
           integration: lambda
           authorizer:
@@ -55,6 +54,39 @@ functions:
           cors:
             origin: '*'
             headers:
+              - x-cognito-token
+
+  getGamesBySportId:
+    handler: functions/getGames.getGamesBySportId
+    events:
+      - http:
+          path: getGamesBySportId/{sportId}/{date}
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+  updateScores:
+    handler: functions/updateScores.updateScores
+    events:
+      - http:
+          path: updateScores
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
               - x-cognito-token
 
 

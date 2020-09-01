@@ -1,11 +1,8 @@
 {
-  "name": "admin-api",
-  "version": "1.0.0",
+  "name": "calcutta-admin-api",
+  "version": "0.0.0",
   "description": "Backend API for the calcutta league admin site",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Calcutta-League/admin-api.git"
@@ -15,16 +12,5 @@
   "bugs": {
     "url": "https://github.com/Calcutta-League/admin-api/issues"
   },
-  "homepage": "https://github.com/Calcutta-League/admin-api#readme",
-  "dependencies": {
-    "mssql": "^6.2.1"
-  },
-  "devDependencies": {
-    "aws-sdk": "^2.727.1",
-    "aws-sdk-mock": "^5.1.0",
-    "jest": "^26.2.2",
-    "serverless-bundle": "^2.0.0",
-    "serverless-dotenv-plugin": "^3.0.0",
-    "serverless-offline": "^6.5.0"
-  }
+  "homepage": "https://github.com/Calcutta-League/admin-api#readme"
 }
