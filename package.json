@@ -1,6 +1,6 @@
 {
   "name": "calcutta-admin-api",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "description": "Backend API for the calcutta league admin site",
   "main": "index.js",
   "repository": {
