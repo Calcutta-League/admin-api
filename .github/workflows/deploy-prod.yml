@@ -29,4 +29,4 @@ env:
   DB_NAME: ${{ secrets.DB_NAME }}
   DB_USER: ${{ secrets.DB_USER }}
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  USER_POOL_ARN: ${{ secrets.USER_POOL_ARN_DEV }}
+  USER_POOL_ARN: ${{ secrets.USER_POOL_ARN_PROD }}
