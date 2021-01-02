@@ -60,7 +60,7 @@ functions:
     handler: functions/getGamesMetadata.getGamesMetadata
     events:
       - http:
-          path: getGamesMetadata
+          path: getGamesMetadata/{sportId}/{date}
           method: get
           integration: lambda
           authorizer:
