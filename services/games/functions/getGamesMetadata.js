@@ -1,7 +1,7 @@
 const connection = require('../utilities/db').connection;
 const mssql = require('mssql');
 
-export async function getGamesBySportId(event, context, callback) {
+export async function getGamesMetadata(event, context, callback) {
   context.callbackWaitsForEmptyEventLoop = false;
 
   console.log(event);
