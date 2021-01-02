@@ -56,6 +56,22 @@ functions:
             headers:
               - x-cognito-token
 
+  getGamesMetadata:
+    handler: functions/getGamesMetadata.getGamesMetadata
+    events:
+      - http:
+          path: getGamesMetadata/{sportId}/{date}
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
   getGamesBySportId:
     handler: functions/getGames.getGamesBySportId
     events:
