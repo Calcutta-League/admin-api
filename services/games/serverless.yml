@@ -10,9 +10,6 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  profile:
-    prod: burke03
-    dev: dev
         
 provider:
   name: aws
