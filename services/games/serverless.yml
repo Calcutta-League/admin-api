@@ -10,9 +10,6 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  profile:
-    prod: burke03
-    dev: dev
         
 provider:
   name: aws
@@ -45,6 +42,22 @@ functions:
     events:
       - http:
           path: getSportOptions
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+  getGamesMetadata:
+    handler: functions/getGamesMetadata.getGamesMetadata
+    events:
+      - http:
+          path: getGamesMetadata/{sportId}/{date}
           method: get
           integration: lambda
           authorizer:
