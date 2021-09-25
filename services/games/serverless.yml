@@ -104,4 +104,4 @@ functions:
 
 
 resources:
-  - ${file(resources/cognito-authorizer.yml)}
+  - ${file(../../resources/cognito-authorizer.yml)}
