@@ -24,9 +24,9 @@ export async function newTournament(event, context, callback) {
       let tvp = populateTournamentPhasesTVP(phases);
 
       request.input('TournamentPhases', tvp);
-
-      let result = await request.execute('dbo.up_AdminNewTournament');
     }
+
+    let result = await request.execute('dbo.up_AdminNewTournament');
 
     callback(null, result.recordset);
   } catch (error) {
