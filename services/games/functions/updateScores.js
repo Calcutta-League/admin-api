@@ -1,4 +1,4 @@
-const connection = require('../../../utilities/db').connection;
+const connection = require('../utilities/db').connection;
 const mssql = require('mssql');
 
 export async function updateScores(event, context, callback) {
