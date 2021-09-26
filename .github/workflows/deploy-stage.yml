@@ -18,6 +18,7 @@ jobs:
       - run: npm install -g serverless
       - run: npm install
       - run: |
+          rm -rf utilities/* resources/*
           cd services/games
           npm install
           serverless deploy -s $STAGE_NAME
