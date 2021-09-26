@@ -52,6 +52,22 @@ functions:
             headers:
               - x-cognito-token
 
+  newTournament:
+    handler: functions/newTournament.newTournament
+    events:
+      - http:
+          path: newTournament
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
 
 resources:
   - ${file(resources/cognito-authorizer.yml)}
