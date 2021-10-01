@@ -68,6 +68,70 @@ functions:
             headers:
               - x-cognito-token
 
+  getTournamentMetadata:
+    handler: functions/getTournamentMetadata.getTournamentMetadata
+    events:
+      - http:
+          path: getTournamentMetadata/{tournamentId}
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+  getTournamentPhases:
+    handler: functions/getTournamentPhases.getTournamentPhases
+    events:
+      - http:
+          path: getTournamentPhases/{tournamentId}
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+  getTournamentRegimes:
+    handler: functions/getTournamentRegimes.getTournamentRegimes
+    events:
+      - http:
+          path: getTournamentRegimes/{tournamentId}
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+  getTournamentRegimePhases:
+    handler: functions/getTournamentRegimePhases.getTournamentRegimePhases
+    events:
+      - http:
+          path: getTournamentRegimePhases/{tournamentRegimeId}
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
 
 resources:
   - ${file(resources/cognito-authorizer.yml)}
