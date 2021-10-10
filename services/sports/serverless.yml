@@ -1,4 +1,4 @@
-service: calcutta-admin-api-sport
+service: calcutta-admin-api-sports
 
 package:
   individually: true
