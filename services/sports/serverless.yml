@@ -37,7 +37,7 @@ provider:
 
 functions:
   getSports:
-    handler: function/getSports.getSports
+    handler: functions/getSports.getSports
     events:
       - http:
           path: getSports
