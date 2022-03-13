@@ -25,9 +25,9 @@ provider:
     DB_USER: ${env:DB_USER}
     DB_PASSWORD: ${env:DB_PASSWORD}
     DB_HOST:
-      Fn::ImportValue: calcutta-db-${self:custom.stage}-address
-    DB_PORT:
-      Fn::ImportValue: calcutta-db-${self:custom.stage}-port
+      Fn::ImportValue: calcutta-db-ec2-${self:custom.stage}-dns-address
+    DB_PORT: 1433
+      # Fn::ImportValue: calcutta-db-${self:custom.stage}-port
   vpc:
     securityGroupIds:
       - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
