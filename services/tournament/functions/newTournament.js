@@ -6,7 +6,7 @@ export async function newTournament(event, context, callback) {
 
   let cognitoSub = event.cognitoPoolClaims.sub;
 
-  let [tournamentName, adminOnly, sportId, phases] = event.body;
+  const { tournamentName, adminOnly, sportId, phases } = event.body;
 
   try {
     if (!connection.isConnected) {
