@@ -17,7 +17,6 @@ provider:
   timeout: 10
   region: us-east-1
   stage: dev
-  # profile: ${self:custom.profile.${self:custom.stage}}
   environment:
     NODE_ENV: ${self:custom.stage}
     APP_ENV: ${self:custom.stage}
