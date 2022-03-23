@@ -66,6 +66,7 @@ functions:
           cors:
             origin: '*'
             headers:
+              - Content-Type
               - x-cognito-token
 
   getTournamentMetadata:
