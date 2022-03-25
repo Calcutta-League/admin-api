@@ -165,6 +165,23 @@ functions:
             headers:
               - x-cognito-token
 
+  newTournamentPhase:
+    handler: functions/newTournamentPhase.newTournamentPhase
+    events:
+      - http:
+          path: newTournamentPhase
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
 
 resources:
   - ${file(resources/cognito-authorizer.yml)}

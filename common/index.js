@@ -1,0 +1,1 @@
+export { populateTournamentPhasesTVP } from './tournamentPhaseType';
