@@ -1,4 +1,4 @@
-import { populateTournamentPhasesTVP } from '../../../common';
+import { populateTournamentPhasesTVP } from '../common';
 
 const connection = require('../utilities/db').connection;
 const mssql = require('mssql');
