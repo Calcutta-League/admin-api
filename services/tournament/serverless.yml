@@ -182,6 +182,22 @@ functions:
               - x-cognito-token
               - Content-Type
 
+  deleteTournamentPhase:
+    handler: functions/deleteTournamentPhase.deleteTournamentPhase
+      events:
+        - http:
+            path: deleteTournamentPhase
+            method: post
+            integration: lambda
+            authorizer:
+              type: COGNITO_USER_POOLS
+              authorizerId:
+                Ref: ApiGatewayAuthorizer
+            cors:
+              origin: '*'
+              headers:
+                - x-cognito-token
+                - Content-Type
 
 resources:
   - ${file(resources/cognito-authorizer.yml)}
