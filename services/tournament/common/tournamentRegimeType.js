@@ -4,6 +4,7 @@ import mssql from 'mssql';
  * @typedef TournamentRegimeType
  * @property {String} name
  * @property {Number} bracketTypeId
+ * @property {String} description
  */
 
 /**
@@ -18,9 +19,10 @@ export function populateTournamentRegimeTVP(tournamentId, regimes) {
   tvp.columns.add('Name', mssql.VarChar(128));
   tvp.columns.add('DisplayOrder', mssql.TinyInt);
   tvp.columns.add('BracketTypeId', mssql.SmallInt);
+  tvp.columns.add('Description', mssql.VarChar(500));
 
   regimes.forEach((regime, id) => {
-    tvp.rows.add(tournamentId, regime.name, id, regime.bracketTypeId);
+    tvp.rows.add(tournamentId, regime.name, id, regime.bracketTypeId, regime.description);
   });
 
   return tvp;
