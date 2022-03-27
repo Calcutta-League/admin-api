@@ -16,7 +16,7 @@ export async function deleteTournamentRegime(event, context, callback) {
     const request = new mssql.Request();
 
     request.input('CognitoSub', mssql.VarChar(256), cognitoSub);
-    request.input('TournamentRegimeId', mssql.Int, tournamentPhaseId);
+    request.input('TournamentRegimeId', mssql.Int, tournamentRegimeId);
 
     const result = await request.execute('dbo.up_AdminDeleteTournamentRegime');
 
