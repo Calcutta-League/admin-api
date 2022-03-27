@@ -199,5 +199,39 @@ functions:
               - x-cognito-token
               - Content-Type
 
+  newTournamentRegime:
+    handler: functions/newTournamentRegime.newTournamentRegime
+    events:
+      - http:
+          path: newTournamentRegime
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  deleteTournamentRegime:
+    handler: functions/deleteTournamentRegime.deleteTournamentRegime
+    events:
+      - http:
+          path: deleteTournamentRegime
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
 resources:
   - ${file(resources/cognito-authorizer.yml)}
