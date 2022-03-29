@@ -20,7 +20,7 @@ export async function deleteTournament(event, context, callback) {
 
     const result = await request.execute('dbo.up_AdminDeleteTournament');
 
-    callback(null, recordset);
+    callback(null, result.recordset);
   } catch (error) {
     console.log(error);
     callback(null, error);
