@@ -26,7 +26,7 @@ export async function newTournamentRegimePhase(event, context, callback) {
       request.input('CommaSeparatedTournamentPhaseIds', mssql.VarChar(1000), phaseList);
     }
 
-    const result = await request.execute('dbo.up_AdminNewTournamentRegimePhase');
+    const result = await request.execute('dbo.up_AdminSetTournamentRegimePhase');
 
     callback(null, result.recordset);
   } catch (error) {
