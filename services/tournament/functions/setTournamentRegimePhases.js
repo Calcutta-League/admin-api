@@ -1,7 +1,7 @@
 const connection = require('../utilities/db').connection;
 const mssql = require('mssql');
 
-export async function newTournamentRegimePhase(event, context, callback) {
+export async function setTournamentRegimePhases(event, context, callback) {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const cognitoSub = event.cognitoPoolClaims.sub;
@@ -26,7 +26,7 @@ export async function newTournamentRegimePhase(event, context, callback) {
       request.input('CommaSeparatedTournamentPhaseIds', mssql.VarChar(1000), phaseList);
     }
 
-    const result = await request.execute('dbo.up_AdminNewTournamentRegimePhase');
+    const result = await request.execute('dbo.up_AdminSetTournamentRegimePhases');
 
     callback(null, result.recordset);
   } catch (error) {
