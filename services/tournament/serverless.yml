@@ -298,11 +298,11 @@ functions:
               - x-cognito-token
               - Content-Type
 
-  newTournamentRegimePhase:
-    handler: functions/newTournamentRegimePhase.newTournamentRegimePhase
+  setTournamentRegimePhases:
+    handler: functions/setTournamentRegimePhases.setTournamentRegimePhases
     events:
       - http:
-          path: newTournamentRegimePhase
+          path: setTournamentRegimePhases
           method: post
           integration: lambda
           authorizer:
