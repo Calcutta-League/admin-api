@@ -3,12 +3,12 @@ import { populateTournamentPhasesTVP } from '../common';
 const connection = require('../utilities/db').connection;
 const mssql = require('mssql');
 
-export async function newTournament(event, context, callback) {
+export async function newTournamentPhase(event, context, callback) {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  let cognitoSub = event.cognitoPoolClaims.sub;
+  const cognitoSub = event.cognitoPoolClaims.sub;
 
-  const { tournamentName, adminOnly, sportId, phases } = event.body;
+  const { tournamentId, phases } = event.body;
 
   try {
     if (!connection.isConnected) {
@@ -18,17 +18,15 @@ export async function newTournament(event, context, callback) {
     const request = new mssql.Request();
 
     request.input('CognitoSub', mssql.VarChar(256), cognitoSub);
-    request.input('TournamentName', mssql.VarChar(128), tournamentName);
-    request.input('SportId', mssql.Int, sportId);
-    request.input('TestOnly', mssql.Bit, adminOnly);
+    request.input('TournamentId', mssql.SmallInt, tournamentId);
 
     if (phases.length > 0) {
-      let tvp = populateTournamentPhasesTVP(phases);
+      const tvp = populateTournamentPhasesTVP(phases);
 
       request.input('TournamentPhases', tvp);
     }
 
-    let result = await request.execute('dbo.up_AdminNewTournament');
+    const result = await request.execute('dbo.up_AdminNewTournamentPhase');
 
     callback(null, result.recordset);
   } catch (error) {

@@ -5,8 +5,6 @@ package:
 
 plugins:
   - serverless-bundle
-  - serverless-offline
-  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -24,9 +22,9 @@ provider:
     DB_USER: ${env:DB_USER}
     DB_PASSWORD: ${env:DB_PASSWORD}
     DB_HOST:
-      Fn::ImportValue: calcutta-db-${self:custom.stage}-address
-    DB_PORT:
-      Fn::ImportValue: calcutta-db-${self:custom.stage}-port
+      Fn::ImportValue: calcutta-db-ec2-${self:custom.stage}-dns-address
+    DB_PORT: 1433
+      # Fn::ImportValue: calcutta-db-${self:custom.stage}-port
   vpc:
     securityGroupIds:
       - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
@@ -66,6 +64,7 @@ functions:
           cors:
             origin: '*'
             headers:
+              - Content-Type
               - x-cognito-token
 
   getTournamentMetadata:
@@ -164,6 +163,174 @@ functions:
             headers:
               - x-cognito-token
 
+  newTournamentPhase:
+    handler: functions/newTournamentPhase.newTournamentPhase
+    events:
+      - http:
+          path: newTournamentPhase
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  deleteTournamentPhase:
+    handler: functions/deleteTournamentPhase.deleteTournamentPhase
+    events:
+      - http:
+          path: deleteTournamentPhase
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  newTournamentRegime:
+    handler: functions/newTournamentRegime.newTournamentRegime
+    events:
+      - http:
+          path: newTournamentRegime
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  deleteTournamentRegime:
+    handler: functions/deleteTournamentRegime.deleteTournamentRegime
+    events:
+      - http:
+          path: deleteTournamentRegime
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  getBracketTypes:
+    handler: functions/getBracketTypes.getBracketTypes
+    events:
+      - http:
+          path: getBracketTypes
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+  setTournamentAdminFlag:
+    handler: functions/setTournamentAdminFlag.setTournamentAdminFlag
+    events:
+      - http:
+          path: setTournamentAdminFlag
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  setTournamentDisabledFlag:
+    handler: functions/setTournamentDisabledFlag.setTournamentDisabledFlag
+    events:
+      - http:
+          path: setTournamentDisabledFlag
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  deleteTournament:
+    handler: functions/deleteTournament.deleteTournament
+    events:
+      - http:
+          path: deleteTournament
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  setTournamentRegimePhases:
+    handler: functions/setTournamentRegimePhases.setTournamentRegimePhases
+    events:
+      - http:
+          path: setTournamentRegimePhases
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  deleteTournamentRegimePhase:
+    handler: functions/deleteTournamentRegimePhase.deleteTournamentRegimePhase
+    events:
+      - http:
+          path: deleteTournamentRegimePhase
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
 
 resources:
   - ${file(resources/cognito-authorizer.yml)}
