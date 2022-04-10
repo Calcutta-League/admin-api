@@ -366,7 +366,7 @@ functions:
               - x-cognito-token
               - Content-Type
 
-  setTournamentRegimeDisabledFlag:
+  setTournamentRegimeFlag:
     handler: functions/setTournamentRegimeDisabledFlag.setTournamentRegimeDisabledFlag
     events:
       - http:
