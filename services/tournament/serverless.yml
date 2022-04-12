@@ -400,5 +400,39 @@ functions:
               - x-cognito-token
               - Content-Type
 
+  newTournamentSlot:
+    handler: functions/newTournamentSlot.newTournamentSlot
+    events:
+      - http:
+          path: newTournamentSlot
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  setTournamentSlotTeam:
+    handler: functions/setTournamentSlotTeam.setTournamentSlotTeam
+    events:
+      - http:
+          path: setTournamentSlotTeam
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
 resources:
   - ${file(resources/cognito-authorizer.yml)}
