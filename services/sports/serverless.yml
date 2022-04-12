@@ -56,7 +56,7 @@ functions:
     handler: functions/getTeamsBySportId.getTeamsBySportId
     events:
       - http:
-          path: getTeamsBySportId
+          path: getTeamsBySportId/{sportId}
           method: get
           integration: lambda
           authorizer:
