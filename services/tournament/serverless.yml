@@ -417,11 +417,11 @@ functions:
               - x-cognito-token
               - Content-Type
 
-  setTournamentSlotTeam:
-    handler: functions/setTournamentSlotTeam.setTournamentSlotTeam
+  updateTournamentSlot:
+    handler: functions/updateTournamentSlot.updateTournamentSlot
     events:
       - http:
-          path: setTournamentSlotTeam
+          path: updateTournamentSlot
           method: post
           integration: lambda
           authorizer:

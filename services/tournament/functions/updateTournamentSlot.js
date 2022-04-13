@@ -1,12 +1,14 @@
+import { populateExistingTournamentSlotsTVP } from '../common';
+
 const connection = require('../utilities/db').connection;
 const mssql = require('mssql');
 
-export async function setTournamentSlotTeam(event, context, callback) {
+export async function updateTournamentSlot(event, context, callback) {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const cognitoSub = event.cognitoPoolClaims.sub;
 
-  const { tournamentRegimeId, slotId, teamId } = event.body;
+  const { tournamentRegimeId, slots } = event.body;
 
   try {
     if (!connection.isConnected) {
@@ -16,11 +18,14 @@ export async function setTournamentSlotTeam(event, context, callback) {
     const request = new mssql.Request();
 
     request.input('CognitoSub', mssql.VarChar(256), cognitoSub);
-    request.input('TournamentRegimeId', mssql.Int, tournamentRegimeId);
-    request.input('TournamentSlotId', mssql.Int, slotId);
-    request.input('TeamId', mssql.BigInt, teamId);
+    
+    if (slots.length) {
+      const tvp = populateExistingTournamentSlotsTVP(tournamentRegimeId, slots);
 
-    const result = await request.execute('dbo.up_AdminSetTournamentSlotTeam');
+      request.input('TournamentSlots', tvp);
+    }
+
+    const result = await request.execute('dbo.up_AdminUpdateTournamentSlot');
 
     callback(null, result.recordset);
   } catch (error) {
