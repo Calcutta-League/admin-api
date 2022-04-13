@@ -332,5 +332,107 @@ functions:
               - x-cognito-token
               - Content-Type
 
+  setTournamentRegimeDescription:
+      handler: functions/setTournamentRegimeDescription.setTournamentRegimeDescription
+      events:
+        - http:
+            path: setTournamentRegimeDescription
+            method: post
+            integration: lambda
+            authorizer:
+              type: COGNITO_USER_POOLS
+              authorizerId:
+                Ref: ApiGatewayAuthorizer
+            cors:
+              origin: '*'
+              headers:
+                - x-cognito-token
+                - Content-Type
+
+  setTournamentRegimeBracketType:
+    handler: functions/setTournamentRegimeBracketType.setTournamentRegimeBracketType
+    events:
+      - http:
+          path: setTournamentRegimeBracketType
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  setTournamentRegimeFlag:
+    handler: functions/setTournamentRegimeDisabledFlag.setTournamentRegimeDisabledFlag
+    events:
+      - http:
+          path: setTournamentRegimeDisabledFlag
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  setTournamentRegimeAdminFlag:
+    handler: functions/setTournamentRegimeAdminFlag.setTournamentRegimeAdminFlag
+    events:
+      - http:
+          path: setTournamentRegimeAdminFlag
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  newTournamentSlot:
+    handler: functions/newTournamentSlot.newTournamentSlot
+    events:
+      - http:
+          path: newTournamentSlot
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  setTournamentSlotTeam:
+    handler: functions/setTournamentSlotTeam.setTournamentSlotTeam
+    events:
+      - http:
+          path: setTournamentSlotTeam
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
 resources:
   - ${file(resources/cognito-authorizer.yml)}

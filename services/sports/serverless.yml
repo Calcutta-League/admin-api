@@ -52,5 +52,21 @@ functions:
             headers:
               - x-cognito-token
 
+  getTeamsBySportId:
+    handler: functions/getTeamsBySportId.getTeamsBySportId
+    events:
+      - http:
+          path: getTeamsBySportId/{sportId}
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
 resources:
   - ${file(resources/cognito-authorizer.yml)}
