@@ -332,7 +332,7 @@ functions:
               - x-cognito-token
               - Content-Type
 
-  setTournamentRegimeDescription:
+  setTournamentRegimeDesc:
       handler: functions/setTournamentRegimeDescription.setTournamentRegimeDescription
       events:
         - http:
