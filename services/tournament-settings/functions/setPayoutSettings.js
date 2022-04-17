@@ -12,7 +12,7 @@ export function setPayoutSettings(event, context, callback) {
 
   try {
     if (!connection.isConnected) {
-      connection.createConnection();
+      await connection.createConnection();
     }
 
     const request = new mssql.Request();
