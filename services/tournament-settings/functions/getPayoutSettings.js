@@ -20,13 +20,7 @@ export async function getPayoutSettings(event, context, callback) {
 
     const result = await request.execute('dbo.up_AdminGetTournamentPayouts');
 
-    const payload = {
-      payouts: result.recordsets[0],
-      phases: result.recordsets[1],
-      payoutTypes: result.recordsets[2]
-    };
-
-    callback(null, payload);
+    callback(null, result.recordset);
   } catch (error) {
     console.log(error);
     callback(null, error);
