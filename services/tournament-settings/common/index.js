@@ -1,0 +1,1 @@
+export { populateTournamentPayoutTypeTVP } from './tournamentPayoutType';
