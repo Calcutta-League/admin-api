@@ -8,6 +8,10 @@ export async function getPayoutSettings(event, context, callback) {
 
   const tournamentRegimeId = event.path.tournamentRegimeId;
 
+  console.log(cognitoSub);
+  console.log(tournamentRegimeId);
+  console.log(process.env);
+
   try {
     if (!connection.isConnected) {
       connection.createConnection();
