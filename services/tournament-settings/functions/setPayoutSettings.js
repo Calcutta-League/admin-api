@@ -3,7 +3,7 @@ import { populateTournamentPayoutTypeTVP } from '../common';
 const connection = require('../utilities/db').connection;
 const mssql = require('mssql');
 
-export function setPayoutSettings(event, context, callback) {
+export async function setPayoutSettings(event, context, callback) {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const cognitoSub = event.cognitoPoolClaims.sub;

@@ -1,7 +1,7 @@
 const connection = require('../utilities/db').connection;
 const mssql = require('mssql');
 
-export function deletePayoutSettings(event, context, callback) {
+export async function deletePayoutSettings(event, context, callback) {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const cognitoSub = event.cognitoPoolClaims.sub;
