@@ -83,5 +83,21 @@ functions:
               - x-cognito-token
               - Content-Type
 
+  getPayoutTypes:
+    handler: functions/getPayoutTypes.getPayoutTypes
+    events:
+      - http:
+          path: getPayoutTypes
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
 resources:
   - ${file(resources/cognito-authorizer.yml)}
