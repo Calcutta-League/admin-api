@@ -15,7 +15,7 @@ export async function getPayoutTypes(event, context, callback) {
 
     request.input('CognitoSub', mssql.VarChar(256), cognitoSub);
 
-    const result = request.execute('dbo.up_AdminGetPayoutTypes');
+    const result = await request.execute('dbo.up_AdminGetPayoutTypes');
 
     callback(null, result.recordset);
   } catch (error) {
