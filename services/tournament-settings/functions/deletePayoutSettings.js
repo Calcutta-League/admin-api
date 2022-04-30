@@ -18,7 +18,7 @@ export async function deletePayoutSettings(event, context, callback) {
     request.input('CognitoSub', mssql.VarChar(256), cognitoSub);
     request.input('TournamentPayoutId', mssql.BigInt, payoutId);
 
-    const result = request.execute('dbo.up_AdminDeleteTournamentPayout');
+    const result = await request.execute('dbo.up_AdminDeleteTournamentPayout');
 
     callback(null, result.recordset);
   } catch (error) {
