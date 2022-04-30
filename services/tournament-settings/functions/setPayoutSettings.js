@@ -19,18 +19,13 @@ export async function setPayoutSettings(event, context, callback) {
 
     request.input('CognitoSub', mssql.VarChar(256), cognitoSub);
 
-    console.log(payouts);
-    console.log(payouts.length);
-
     if (payouts.length >= 1) {
       const tvp = populateTournamentPayoutTypeTVP(payouts);
 
       request.input('TournamentPayouts', tvp);
     }
 
-    const result = request.execute('dbo.up_AdminSetTournamentPayouts');
-
-    console.log(result);
+    const result = await request.execute('dbo.up_AdminSetTournamentPayouts');
 
     callback(null, result.recordset);
   } catch (error) {
