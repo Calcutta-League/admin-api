@@ -1,0 +1,103 @@
+service: admin-tournament-settings
+
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+        
+provider:
+  name: aws
+  runtime: nodejs12.x
+  timeout: 10
+  region: us-east-1
+  stage: dev
+  environment:
+    NODE_ENV: ${self:custom.stage}
+    APP_ENV: ${self:custom.stage}
+    DB_NAME: ${env:DB_NAME}
+    DB_USER: ${env:DB_USER}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+    DB_HOST:
+      Fn::ImportValue: calcutta-db-ec2-${self:custom.stage}-dns-address
+    DB_PORT: 1433
+  vpc:
+    securityGroupIds:
+      - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+    subnetIds:
+      - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+      - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+      - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+
+functions:
+  getPayoutSettings:
+    handler: functions/getPayoutSettings.getPayoutSettings
+    events:
+      - http:
+          path: getPayoutSettings/{tournamentRegimeId}
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+  setPayoutSettings:
+    handler: functions/setPayoutSettings.setPayoutSettings
+    events:
+      - http:
+          path: setPayoutSettings
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  deletePayoutSettings:
+    handler: functions/deletePayoutSettings.deletePayoutSettings
+    events:
+      - http:
+          path: deletePayoutSettings
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  getPayoutTypes:
+    handler: functions/getPayoutTypes.getPayoutTypes
+    events:
+      - http:
+          path: getPayoutTypes
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+resources:
+  - ${file(resources/cognito-authorizer.yml)}

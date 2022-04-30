@@ -1,12 +1,12 @@
 const connection = require('../utilities/db').connection;
 const mssql = require('mssql');
 
-export async function setTournamentSlotTeam(event, context, callback) {
+export async function deletePayoutSettings(event, context, callback) {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const cognitoSub = event.cognitoPoolClaims.sub;
 
-  const { tournamentRegimeId, slotId, teamId } = event.body;
+  const { payoutId } = event.body;
 
   try {
     if (!connection.isConnected) {
@@ -16,11 +16,9 @@ export async function setTournamentSlotTeam(event, context, callback) {
     const request = new mssql.Request();
 
     request.input('CognitoSub', mssql.VarChar(256), cognitoSub);
-    request.input('TournamentRegimeId', mssql.Int, tournamentRegimeId);
-    request.input('TournamentSlotId', mssql.Int, slotId);
-    request.input('TeamId', mssql.BigInt, teamId);
+    request.input('TournamentPayoutId', mssql.BigInt, payoutId);
 
-    const result = await request.execute('dbo.up_AdminSetTournamentSlotTeam');
+    const result = await request.execute('dbo.up_AdminDeleteTournamentPayout');
 
     callback(null, result.recordset);
   } catch (error) {
