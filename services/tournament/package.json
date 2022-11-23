@@ -23,7 +23,7 @@
     "aws-sdk": "^2.727.1",
     "aws-sdk-mock": "^5.1.0",
     "jest": "^26.2.2",
-    "serverless-bundle": "^2.0.0",
+    "serverless-bundle": "^5.5.0",
     "serverless-dotenv-plugin": "^3.0.0",
     "serverless-offline": "^6.5.0"
   }
