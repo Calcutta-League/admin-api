@@ -61,7 +61,7 @@ function parseGamesList(gamesList) {
         gameObj.postponed = 1;
 
         postponedGames.push(gameObj);
-      } else if (game.Team1Score !== undefined && game.Team2Score !== undefined && +game.Team1Score !== +game.Team2Score) {
+      } else if (game.Team1Score !== undefined && game.Team2Score !== undefined) {
         gameObj.team1Score = +game.Team1Score;
         gameObj.team2Score = +game.Team2Score;
         gameObj.overtime = !!game.Overtime ? 1 : 0;
