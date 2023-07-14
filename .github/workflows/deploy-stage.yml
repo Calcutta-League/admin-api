@@ -20,7 +20,7 @@ jobs:
       - run: |
           cd services/games
           npm install
-          serverless deploy -s $STAGE_NAME
+          serverless deploy -s $STAGE_NAME --verbose
 
   tournament_service:
     name: Deploy tournament service API
@@ -37,7 +37,7 @@ jobs:
       - run: |
           cd services/tournament
           npm install
-          serverless deploy -s $STAGE_NAME
+          serverless deploy -s $STAGE_NAME --verbose
 
   sports_service:
     name: Deploy sports service API
@@ -54,7 +54,7 @@ jobs:
       - run: |
           cd services/sports
           npm install
-          serverless deploy -s $STAGE_NAME
+          serverless deploy -s $STAGE_NAME --verbose
 
   tournament_settings_service:
     name: Deploy tournament-settings service API
@@ -71,7 +71,7 @@ jobs:
       - run: |
           cd services/tournament-settings
           npm install
-          serverless deploy -s $STAGE_NAME
+          serverless deploy -s $STAGE_NAME --verbose
   
 env:
   STAGE_NAME: stage
