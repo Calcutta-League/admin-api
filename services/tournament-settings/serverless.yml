@@ -14,7 +14,7 @@ provider:
   runtime: nodejs16.x
   timeout: 10
   region: us-east-1
-  stage: dev
+  stage: stage
   environment:
     NODE_ENV: ${self:custom.stage}
     APP_ENV: ${self:custom.stage}
