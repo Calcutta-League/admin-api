@@ -7,6 +7,7 @@ on:
 jobs:
   games_service:
     name: Deploy games service API
+    environment: prod
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +25,7 @@ jobs:
 
   tournament_service:
     name: Deploy tournament service API
+    environment: prod
     runs-on: ubuntu-latest
 
     steps:
@@ -41,6 +43,7 @@ jobs:
 
   sports_service:
     name: Deploy sports service API
+    environment: prod
     runs-on: ubuntu-latest
 
     steps:
@@ -58,6 +61,7 @@ jobs:
 
   tournament_settings_service:
     name: Deploy tournament-settings service API
+    environment: prod
     runs-on: ubuntu-latest
 
     steps:
