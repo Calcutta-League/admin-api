@@ -2,11 +2,12 @@ name: Stage
 
 on:
   push:
-    branches: develop
+    branches: stage
 
 jobs:
   games_service:
     name: Deploy games service API
+    environment: stage
     runs-on: ubuntu-latest
 
     steps:
@@ -20,10 +21,11 @@ jobs:
       - run: |
           cd services/games
           npm install
-          serverless deploy -s $STAGE_NAME
+          serverless deploy -s $STAGE_NAME --verbose
 
   tournament_service:
     name: Deploy tournament service API
+    environment: stage
     runs-on: ubuntu-latest
 
     steps:
@@ -37,10 +39,11 @@ jobs:
       - run: |
           cd services/tournament
           npm install
-          serverless deploy -s $STAGE_NAME
+          serverless deploy -s $STAGE_NAME --verbose
 
   sports_service:
     name: Deploy sports service API
+    environment: stage
     runs-on: ubuntu-latest
 
     steps:
@@ -54,10 +57,11 @@ jobs:
       - run: |
           cd services/sports
           npm install
-          serverless deploy -s $STAGE_NAME
+          serverless deploy -s $STAGE_NAME --verbose
 
   tournament_settings_service:
     name: Deploy tournament-settings service API
+    environment: stage
     runs-on: ubuntu-latest
 
     steps:
@@ -71,13 +75,13 @@ jobs:
       - run: |
           cd services/tournament-settings
           npm install
-          serverless deploy -s $STAGE_NAME
+          serverless deploy -s $STAGE_NAME --verbose
   
 env:
-  STAGE_NAME: dev
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+  STAGE_NAME: stage
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   DB_NAME: ${{ secrets.DB_NAME }}
   DB_USER: ${{ secrets.DB_USER }}
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  USER_POOL_ARN: ${{ secrets.USER_POOL_ARN_DEV }}
+  USER_POOL_ARN: ${{ secrets.USER_POOL_ARN }}
