@@ -433,5 +433,22 @@ functions:
               - x-cognito-token
               - Content-Type
 
+  overrideTournamentStatus:
+    handler: functions/overrideTournamentStatus.overrideTournamentStatus
+    events:
+      - http:
+          path: overrideTournamentStatus
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
 resources:
   - ${file(resources/cognito-authorizer.yml)}
