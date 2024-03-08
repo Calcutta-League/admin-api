@@ -14,7 +14,7 @@ export async function getLegacyLeagues(event, context, callback) {
     const request = new mssql.Request();
     request.input('CognitoSub', mssql.VarChar(256), cognitoSub);
     
-    const result = request.execute('dbo.up_AdminGetLegacyLeagues');
+    const result = await request.execute('dbo.up_AdminGetLegacyLeagues');
     console.log(result);
 
     callback(null, result.recordset);
