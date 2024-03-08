@@ -22,6 +22,9 @@
   "devDependencies": {
     "aws-sdk": "^2.727.1",
     "aws-sdk-mock": "^5.1.0",
-    "jest": "^26.2.2"
+    "jest": "^26.2.2",
+    "serverless-bundle": "^6.1.0",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-offline": "^13.3.3"
   }
 }
