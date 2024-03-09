@@ -143,5 +143,8 @@ functions:
   dumpDataIntoDynamoDb:
     handler: functions/dumpDataIntoDynamoDb.dumpDataIntoDynamoDb
 
+  # pullDataFromSqlServer:
+  #   handler: functions/pullDataFromSqlServer.pullDataFromSqlServer
+
 resources:
   - ${file(resources/cognito-authorizer.yml)}
