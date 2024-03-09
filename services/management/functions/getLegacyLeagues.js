@@ -1,3 +1,5 @@
+import { fetchLegacyLeagues } from '../utilities/fetchLegacyLeagues';
+
 const mssql = require('mssql');
 const connection = require('../utilities/db').connection;
 
@@ -11,13 +13,9 @@ export async function getLegacyLeagues(event, context, callback) {
       await connection.createConnection();
     }
 
-    const request = new mssql.Request();
-    request.input('CognitoSub', mssql.VarChar(256), cognitoSub);
-    
-    const result = await request.execute('dbo.up_AdminGetLegacyLeagues');
-    console.log(result);
+    const leagues = await fetchLegacyLeagues(cognitoSub);
 
-    callback(null, result.recordset);
+    callback(null, leagues);
   } catch (error) {
     console.log(error);
 
