@@ -78,7 +78,7 @@ functions:
         - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
     events:
       - http:
-          path: syncLeague/{leagueId}
+          path: syncLeague
           method: post
           integration: lambda
           authorizer:
@@ -102,7 +102,31 @@ functions:
         - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
     events:
       - http:
-          path: batchSyncLeagues/{numLeagues}
+          path: batchSyncLeagues
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  skipSync:
+    handler: functions/skipSync.skipSync
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+    events:
+      - http:
+          path: skipSync
           method: post
           integration: lambda
           authorizer:

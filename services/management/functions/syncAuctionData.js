@@ -23,7 +23,7 @@ export async function syncLeague(event, context, callback) {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const cognitoSub = event.cognitoPoolClaims.sub;
-  const leagueId = +event.path.leagueId;
+  const { leagueId } = event.body;
 
   try {
     if (!connection.isConnected) {
@@ -60,7 +60,7 @@ export async function batchSyncLeagues(event, context, callback) {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const cognitoSub = event.cognitoPoolClaims.sub;
-  const numLeagues = +event.path.numLeagues;
+  const { numLeagues } = event.body;
 
   try {
     if (!connection.isConnected) {
