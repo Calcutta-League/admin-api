@@ -1,8 +1,5 @@
 import AWS from 'aws-sdk';
 import { LAMBDAS } from '../utilities/constants';
-import { fetchLegacyLeagues } from '../utilities/fetchLegacyLeagues';
-
-const connection = require('../utilities/db').connection;
 
 const lambda = new AWS.Lambda();
 
@@ -24,10 +21,6 @@ export async function syncLeague(event, context, callback) {
   const { leagueId } = event.body;
 
   try {
-    if (!connection.isConnected) {
-      await connection.createConnection();
-    }
-
     // fetch all data for the league from Sql Server
     const data = await pullData(cognitoSub, leagueId);
     console.log(data);
@@ -62,11 +55,7 @@ export async function batchSyncLeagues(event, context, callback) {
   const { numLeagues } = event.body;
 
   try {
-    if (!connection.isConnected) {
-      await connection.createConnection();
-    }
-
-    const leagues = await fetchLegacyLeagues(cognitoSub, numLeagues);
+    const leagues = await pullLegacyLeagues(cognitoSub, numLeagues);
 
     for (let league of leagues) {
       const data = await pullData(cognitoSub, league.LeagueId);
@@ -145,4 +134,19 @@ async function updateLeagueLegacyStatus(cognitoSub, leagueId) {
 
   const lambdaResponse = await lambda.invoke(lambdaParams).promise();
   console.log(lambdaResponse);
+}
+
+async function pullLegacyLeagues(cognitoSub, numLeagues) {
+  const lambdaParams = {
+    FunctionName: LAMBDAS.GET_LEGACY_LEAGUES_INVOKABLE,
+    LogType: 'Tail',
+    Payload: JSON.stringify({
+      cognitoSub: cognitoSub,
+      numLeagues: numLeagues
+    })
+  };
+
+  const lambdaResponse = await lambda.invoke(lambdaParams).promise();
+
+  return lambdaResponse.Payload;
 }

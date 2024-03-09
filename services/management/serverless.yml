@@ -69,13 +69,6 @@ functions:
 
   syncLeague:
     handler: functions/syncAuctionData.syncLeague
-    vpc:
-      securityGroupIds:
-        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
-      subnetIds:
-        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
-        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
-        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
     events:
       - http:
           path: syncLeague
@@ -93,13 +86,6 @@ functions:
 
   batchSyncLeagues:
     handler: functions/syncAuctionData.batchSyncLeagues
-    vpc:
-      securityGroupIds:
-        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
-      subnetIds:
-        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
-        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
-        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
     events:
       - http:
           path: batchSyncLeagues
@@ -145,9 +131,33 @@ functions:
 
   pullDataFromSqlServer:
     handler: functions/pullDataFromSqlServer.pullDataFromSqlServer
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
 
   skipSyncInvokable:
     handler: functions/skipSync.skipSyncInvokable
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+
+  getLegacyLeaguesInvokable:
+    handler: functions/getLegacyLeagues.getLegacyLeaguesInvokable
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
 
 resources:
   - ${file(resources/cognito-authorizer.yml)}
