@@ -1,5 +1,5 @@
 export const LAMBDAS = {
-  DUMP_DATA_INTO_DYNAMODB: `calcutta-auction-service-v2-${process.env.APP_ENV}-dumpDataIntoDynamoDb`
+  DUMP_DATA_INTO_DYNAMODB: `calcutta-admin-management-${process.env.APP_ENV}-dumpDataIntoDynamoDb`
 };
 
 export const DYNAMODB_TABLES = {
