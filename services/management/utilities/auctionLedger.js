@@ -29,7 +29,7 @@ export async function syncAuctionLedger(leagueId, results) {
 
     const ledgerItem = constructAuctionLedgerItem({ 
       leagueId: leagueId,
-      ledgerId: timestamp,
+      ledgerId: timestamp + itemCount,
       ledgerAction: 'SALE',
       itemId: sale.ItemId,
       itemTypeId: sale.ItemTypeId,
