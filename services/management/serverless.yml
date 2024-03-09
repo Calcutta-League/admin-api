@@ -1,0 +1,165 @@
+service: calcutta-admin-management
+
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  CHAT_TABLE: AuctionChat
+  AUCTION_SETTINGS_TABLE: AuctionSettings
+  LEAGUE_MEMBERSHIP_TABLE: LeagueMembership
+  AUCTION_LEDGER_TABLE: AuctionLedger
+  AUCTION_TABLE: Auctions
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  timeout: 30
+  region: us-east-1
+  stage: ${self:custom.stage}
+  iam:
+    role:
+      Fn::Join:
+        - ''
+        - - 'arn:aws:iam::'
+          - Ref: AWS::AccountId
+          - ':role/calcutta-'
+          - ${self:custom.stage}
+          - '-dynamodb-websocket-role'
+  environment:
+    NODE_ENV: ${self:custom.stage}
+    APP_ENV: ${self:custom.stage}
+    AUCTION_SETTINGS_TABLE: ${self:custom.AUCTION_SETTINGS_TABLE}
+    LEAGUE_MEMBERSHIP_TABLE: ${self:custom.LEAGUE_MEMBERSHIP_TABLE}
+    AUCTION_LEDGER_TABLE: ${self:custom.AUCTION_LEDGER_TABLE}
+    AUCTION_TABLE: ${self:custom.AUCTION_TABLE}
+    DB_NAME: ${env:DB_NAME}
+    DB_USER: ${env:DB_USER}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+    DB_HOST:
+      Fn::ImportValue: calcutta-db-ec2-${self:custom.stage}-dns-address
+    DB_PORT: 1433
+
+functions:
+  getLegacyLeagues:
+    handler: functions/getLegacyLeagues.getLegacyLeagues
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+    events:
+      - http:
+          path: getLegacyLeagues
+          method: get
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+
+  syncLeague:
+    handler: functions/syncAuctionData.syncLeague
+    events:
+      - http:
+          path: syncLeague
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  batchSyncLeagues:
+    handler: functions/syncAuctionData.batchSyncLeagues
+    events:
+      - http:
+          path: batchSyncLeagues
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  skipSync:
+    handler: functions/skipSync.skipSync
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+    events:
+      - http:
+          path: skipSync
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
+  # invokable - not called by API Gateway
+  dumpDataIntoDynamoDb:
+    handler: functions/dumpDataIntoDynamoDb.dumpDataIntoDynamoDb
+
+  pullDataFromSqlServer:
+    handler: functions/pullDataFromSqlServer.pullDataFromSqlServer
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+
+  skipSyncInvokable:
+    handler: functions/skipSync.skipSyncInvokable
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+
+  getLegacyLeaguesInvokable:
+    handler: functions/getLegacyLeagues.getLegacyLeaguesInvokable
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+
+resources:
+  - ${file(resources/cognito-authorizer.yml)}
