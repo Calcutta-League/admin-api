@@ -33,7 +33,7 @@ export async function syncLeague(event, context, callback) {
     // fetch all data for the league from Sql Server
     const data = await pullData(cognitoSub, leagueId);
 
-    await dumpData({
+    const dumpRes = await dumpData({
       leagueId: leagueId,
       leagueMemberships: data.leagueMemberships,
       auctionSettings: data.auctionSettings,
@@ -42,6 +42,12 @@ export async function syncLeague(event, context, callback) {
       taxRules: data.taxRules,
       auctionResults: data.auctionResults
     });
+
+    if (dumpRes) {
+      await markLeagueNonLegacy(cognitoSub, leagueId);
+    } else {
+      throw new Error(`Error syncing leagueId: ${leagueId}`);
+    }
 
     callback(null, { message: `LeagueId: ${leagueId} successfully synced` });
   } catch (error) {
@@ -66,7 +72,7 @@ export async function batchSyncLeagues(event, context, callback) {
     for (let league of leagues) {
       const data = await pullData(cognitoSub, league.LeagueId);
       
-      await dumpData({
+      const dumpRes = await dumpData({
         leagueId: league.LeagueId,
         leagueMemberships: data.leagueMemberships,
         auctionSettings: data.auctionSettings,
@@ -75,6 +81,12 @@ export async function batchSyncLeagues(event, context, callback) {
         taxRules: data.taxRules,
         auctionResults: data.auctionResults
       });
+
+      if (dumpRes) {
+        await markLeagueNonLegacy(cognitoSub, league.LeagueId);
+      } else {
+        throw new Error(`Error syncing leagueId: ${league.LeagueId}`);
+      }
     }
 
     callback(null, { message: `${numLeagues} leagues successfully synced` });
@@ -122,9 +134,5 @@ async function dumpData({ leagueId, leagueMemberships, auctionSettings, auctionS
   const lambdaResponse = await lambda.invoke(lambdaParams).promise();
   console.log(lambdaResponse);
 
-  if (!!lambdaResponse.Payload) {
-    await markLeagueNonLegacy(cognitoSub, leagueId);
-  } else {
-    throw new Error(`Error syncing leagueId: ${leagueId}`);
-  }
+  return !!lambdaResponse.Payload;
 }
