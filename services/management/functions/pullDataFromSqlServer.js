@@ -1,3 +1,5 @@
+import { getDataFromProc } from '../utilities/getSqlServerData';
+
 const connection = require('../utilities/db').connection;
 
 export async function pullDataFromSqlServer(event, context, callback) {
@@ -18,7 +20,6 @@ export async function pullDataFromSqlServer(event, context, callback) {
     callback(null, error);
   }
 }
-
 
 async function pullData(cognitoSub, leagueId) {
   // fetch all data for the league from Sql Server
