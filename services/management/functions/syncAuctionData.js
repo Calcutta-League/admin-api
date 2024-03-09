@@ -62,6 +62,7 @@ export async function batchSyncLeagues(event, context, callback) {
       
       const dumpRes = await dumpData({
         leagueId: league.LeagueId,
+        leagueStatus: league.LeagueStatus,
         leagueMemberships: data.leagueMemberships,
         auctionSettings: data.auctionSettings,
         auctionSlots: data.auctionSlots,
