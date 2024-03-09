@@ -14,7 +14,7 @@ export async function syncAuctionLedger(leagueId, results) {
     if (itemCount == 25) {
       const params = {
         RequestItems: {
-          AUCTION_LEDGER_TABLE: items
+          [AUCTION_LEDGER_TABLE]: items
         },
         ReturnConsumedCapacity: 'TOTAL',
         ReturnItemCollectionMetrics: 'SIZE'
