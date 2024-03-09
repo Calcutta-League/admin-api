@@ -20,7 +20,16 @@ provider:
   runtime: nodejs18.x
   timeout: 30
   region: us-east-1
-  stage: dev
+  stage: ${self:custom.stage}
+  iam:
+    role:
+      Fn::Join:
+        - ''
+        - - 'arn:aws:iam::'
+          - Ref: AWS::AccountId
+          - ':role/calcutta-'
+          - ${self:custom.stage}
+          - '-dynamodb-websocket-role'
   environment:
     NODE_ENV: ${self:custom.stage}
     APP_ENV: ${self:custom.stage}
@@ -37,8 +46,6 @@ provider:
 functions:
   getLegacyLeagues:
     handler: functions/getLegacyLeagues.getLegacyLeagues
-    role:
-      Fn::GetAtt: [CalcuttaLambdaRole, Arn]
     vpc:
       securityGroupIds:
         - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
@@ -62,8 +69,6 @@ functions:
 
   syncLeague:
     handler: functions/syncAuctionData.syncLeague
-    role:
-      Fn::GetAtt: [CalcuttaLambdaRole, Arn]
     vpc:
       securityGroupIds:
         - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
@@ -88,8 +93,6 @@ functions:
 
   batchSyncLeagues:
     handler: functions/syncAuctionData.batchSyncLeagues
-    role:
-      Fn::GetAtt: [CalcuttaLambdaRole, Arn]
     vpc:
       securityGroupIds:
         - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
@@ -115,9 +118,6 @@ functions:
   # invokable - not called by API Gateway
   dumpDataIntoDynamoDb:
     handler: functions/dumpDataIntoDynamoDb.dumpDataIntoDynamoDb
-    role:
-      Fn::GetAtt: [CalcuttaLambdaRole, Arn]
 
 resources:
   - ${file(resources/cognito-authorizer.yml)}
-  - ${file(resources/roles.yml)}
