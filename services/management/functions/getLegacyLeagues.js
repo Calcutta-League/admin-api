@@ -1,6 +1,5 @@
 import { fetchLegacyLeagues } from '../utilities/fetchLegacyLeagues';
 
-const mssql = require('mssql');
 const connection = require('../utilities/db').connection;
 
 export async function getLegacyLeagues(event, context, callback) {
