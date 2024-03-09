@@ -35,7 +35,7 @@ export async function syncAuctionLedger(leagueId, results) {
       itemTypeId: sale.ItemTypeId,
       userId: sale.UserId,
       alias: sale.Alias,
-      price: sale.Price == 0 ? null : sale.Price
+      price: sale.Price
     });
 
     items.push(ledgerItem);
