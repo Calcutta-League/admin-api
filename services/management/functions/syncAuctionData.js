@@ -98,7 +98,7 @@ async function pullData(cognitoSub, leagueId) {
 
   const lambdaResponse = await lambda.invoke(lambdaParams).promise();
 
-  return lambdaResponse.Payload;
+  return JSON.parse(lambdaResponse.Payload);
 }
 
 async function dumpData({ leagueId, leagueMemberships, auctionSettings, auctionSlots, bidRules, taxRules, auctionResults }) {
@@ -119,7 +119,7 @@ async function dumpData({ leagueId, leagueMemberships, auctionSettings, auctionS
   const lambdaResponse = await lambda.invoke(lambdaParams).promise();
   console.log(lambdaResponse);
 
-  return !!lambdaResponse.Payload;
+  return !!JSON.parse(lambdaResponse.Payload);
 }
 
 async function updateLeagueLegacyStatus(cognitoSub, leagueId) {
@@ -148,5 +148,5 @@ async function pullLegacyLeagues(cognitoSub, numLeagues) {
 
   const lambdaResponse = await lambda.invoke(lambdaParams).promise();
 
-  return lambdaResponse.Payload;
+  return JSON.parse(lambdaResponse.Payload);
 }
