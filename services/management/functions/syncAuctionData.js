@@ -1,7 +1,5 @@
 import AWS from 'aws-sdk';
-import { getDataFromProc } from '../utilities/getSqlServerData';
 import { LAMBDAS } from '../utilities/constants';
-import { markLeagueNonLegacy } from '../utilities/markLeagueNonLegacy';
 import { fetchLegacyLeagues } from '../utilities/fetchLegacyLeagues';
 
 const connection = require('../utilities/db').connection;
@@ -32,6 +30,7 @@ export async function syncLeague(event, context, callback) {
 
     // fetch all data for the league from Sql Server
     const data = await pullData(cognitoSub, leagueId);
+    console.log(data);
 
     const dumpRes = await dumpData({
       leagueId: leagueId,
@@ -44,7 +43,7 @@ export async function syncLeague(event, context, callback) {
     });
 
     if (dumpRes) {
-      await markLeagueNonLegacy(cognitoSub, leagueId);
+      await updateLeagueLegacyStatus(cognitoSub, leagueId);
     } else {
       throw new Error(`Error syncing leagueId: ${leagueId}`);
     }
@@ -83,7 +82,7 @@ export async function batchSyncLeagues(event, context, callback) {
       });
 
       if (dumpRes) {
-        await markLeagueNonLegacy(cognitoSub, league.LeagueId);
+        await updateLeagueLegacyStatus(cognitoSub, league.LeagueId);
       } else {
         throw new Error(`Error syncing leagueId: ${league.LeagueId}`);
       }
@@ -99,21 +98,18 @@ export async function batchSyncLeagues(event, context, callback) {
 
 async function pullData(cognitoSub, leagueId) {
   // fetch all data for the league from Sql Server
-  const leagueMemberships = await getDataFromProc(cognitoSub, leagueId, 'dbo.up_AdminGetLeagueMemberships');
-  const auctionSettings = await getDataFromProc(cognitoSub, leagueId, 'dbo.up_AdminGetAuctionSettings');
-  const auctionSlots = await getDataFromProc(cognitoSub, leagueId, 'dbo.up_AdminGetAuctionSlots');
-  const bidRules = await getDataFromProc(cognitoSub, leagueId, 'dbo.up_AdminGetAuctionBidRules');
-  const taxRules = await getDataFromProc(cognitoSub, leagueId, 'dbo.up_AdminGetAuctionTaxRules');
-  const auctionResults = await getDataFromProc(cognitoSub, leagueId, 'dbo.up_AdminGetAuctionResults');
-
-  return {
-    leagueMemberships: leagueMemberships,
-    auctionSettings: auctionSettings,
-    auctionSlots: auctionSlots,
-    bidRules: bidRules,
-    taxRules: taxRules,
-    auctionResults: auctionResults
+  const lambdaParams = {
+    FunctionName: LAMBDAS.PULL_DATA_FROM_SQL_SERVER,
+    LogType: 'Tail',
+    Payload: JSON.stringify({
+      cognitoSub: cognitoSub,
+      leagueId: leagueId
+    })
   };
+
+  const lambdaResponse = await lambda.invoke(lambdaParams).promise();
+
+  return lambdaResponse.Payload;
 }
 
 async function dumpData({ leagueId, leagueMemberships, auctionSettings, auctionSlots, bidRules, taxRules, auctionResults }) {
@@ -135,4 +131,18 @@ async function dumpData({ leagueId, leagueMemberships, auctionSettings, auctionS
   console.log(lambdaResponse);
 
   return !!lambdaResponse.Payload;
+}
+
+async function updateLeagueLegacyStatus(cognitoSub, leagueId) {
+  const lambdaParams = {
+    FunctionName: LAMBDAS.SKIP_SYNC_INVOKABLE,
+    LogType: 'Tail',
+    Payload: JSON.stringify({
+      leagueId: leagueId,
+      cognitoSub: cognitoSub
+    })
+  };
+
+  const lambdaResponse = await lambda.invoke(lambdaParams).promise();
+  console.log(lambdaResponse);
 }

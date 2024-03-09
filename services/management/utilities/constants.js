@@ -1,5 +1,7 @@
 export const LAMBDAS = {
-  DUMP_DATA_INTO_DYNAMODB: `calcutta-admin-management-${process.env.APP_ENV}-dumpDataIntoDynamoDb`
+  DUMP_DATA_INTO_DYNAMODB: `calcutta-admin-management-${process.env.APP_ENV}-dumpDataIntoDynamoDb`,
+  PULL_DATA_FROM_SQL_SERVER: `calcutta-admin-management-${process.env.APP_ENV}-pullDataFromSqlServer`,
+  SKIP_SYNC_INVOKABLE: `calcutta-admin-management-${process.env.APP_ENV}-skipSyncInvokable`
 };
 
 export const DYNAMODB_TABLES = {
