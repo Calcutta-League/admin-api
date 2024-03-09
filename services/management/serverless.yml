@@ -14,6 +14,7 @@ custom:
   AUCTION_SETTINGS_TABLE: AuctionSettings
   LEAGUE_MEMBERSHIP_TABLE: LeagueMembership
   AUCTION_LEDGER_TABLE: AuctionLedger
+  AUCTION_TABLE: Auctions
 
 provider:
   name: aws
@@ -36,6 +37,7 @@ provider:
     AUCTION_SETTINGS_TABLE: ${self:custom.AUCTION_SETTINGS_TABLE}
     LEAGUE_MEMBERSHIP_TABLE: ${self:custom.LEAGUE_MEMBERSHIP_TABLE}
     AUCTION_LEDGER_TABLE: ${self:custom.AUCTION_LEDGER_TABLE}
+    AUCTION_TABLE: ${self:custom.AUCTION_TABLE}
     DB_NAME: ${env:DB_NAME}
     DB_USER: ${env:DB_USER}
     DB_PASSWORD: ${env:DB_PASSWORD}
