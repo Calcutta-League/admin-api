@@ -16,6 +16,7 @@ export async function synchronizeSlots(event, context, callback) {
 
   try {
     const leagues = await pullLeaguesForTournamentRegime(cognitoSub, tournamentRegimeId);
+    console.log(leagues);
     const leagueCount = leagues.length;
 
     for (let l of leagues) {
