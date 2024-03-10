@@ -86,6 +86,23 @@ functions:
               - x-cognito-token
               - Content-Type
 
+  synchronizeSlots:
+    handler: functions/synchronizeSlots.synchronizeSlots
+    events:
+      - http:
+          path: synchronizeSlots
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
+
   batchSyncLeagues:
     handler: functions/syncAuctionData.batchSyncLeagues
     events:
@@ -127,12 +144,34 @@ functions:
               - x-cognito-token
               - Content-Type
 
+
+
   # invokable - not called by API Gateway
   dumpDataIntoDynamoDb:
     handler: functions/dumpDataIntoDynamoDb.dumpDataIntoDynamoDb
 
   pullDataFromSqlServer:
     handler: functions/pullDataFromSqlServer.pullDataFromSqlServer
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+
+  pullLeaguesForTournamentRegime:
+    handler: functions/pullLeaguesForTournamentRegime.pullLeaguesForTournamentRegime
+    vpc:
+      securityGroupIds:
+        - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
+      subnetIds:
+        - Fn::ImportValue: calcutta-lambda-subnet1-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet2-${self:custom.stage}
+        - Fn::ImportValue: calcutta-lambda-subnet3-${self:custom.stage}
+
+  pullLeagueSlots:
+    handler: functions/pullLeagueSlots.pullLeagueSlots
     vpc:
       securityGroupIds:
         - Fn::ImportValue: calcutta-lambdaSG-${self:custom.stage}
