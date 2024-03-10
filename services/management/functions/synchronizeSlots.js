@@ -48,11 +48,11 @@ async function pullLeaguesForTournamentRegime(cognitoSub, tournamentRegimeId) {
 
 async function pullLeagueSlots(cognitoSub, leagueId) {
   const lambdaParams = {
-    FunctionName: LAMBDAS.PULL_LEAGUES_FOR_TOURNAMENT_REGIME,
+    FunctionName: LAMBDAS.PULL_LEAGUE_SLOTS,
     LogType: 'Tail',
     Payload: JSON.stringify({
       cognitoSub: cognitoSub,
-      tournamentRegimeId: tournamentRegimeId
+      leagueId: leagueId
     })
   };
 
