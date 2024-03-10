@@ -88,20 +88,20 @@ functions:
 
   synchronizeSlots:
     handler: functions/synchronizeSlots.synchronizeSlots
-      events:
-        - http:
-            path: synchronizeSlots
-            method: post
-            integration: lambda
-            authorizer:
-              type: COGNITO_USER_POOLS
-              authorizerId:
-                Ref: ApiGatewayAuthorizer
-            cors:
-              origin: '*'
-              headers:
-                - x-cognito-token
-                - Content-Type
+    events:
+      - http:
+          path: synchronizeSlots
+          method: post
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          cors:
+            origin: '*'
+            headers:
+              - x-cognito-token
+              - Content-Type
 
   batchSyncLeagues:
     handler: functions/syncAuctionData.batchSyncLeagues
